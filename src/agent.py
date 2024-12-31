@@ -24,7 +24,7 @@ class Agent:
         point_l = Point(head.x - 20, head.y)
         point_r = Point(head.x + 20, head.y)
         point_u = Point(head.x, head.y - 20)
-        point_d = Point(head.x, head.y + 10)
+        point_d = Point(head.x, head.y + 20)
 
         dir_l = game.direction == Direction.LEFT
         dir_r = game.direction == Direction.RIGHT
