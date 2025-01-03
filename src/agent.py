@@ -14,11 +14,12 @@ class Agent:
         self.epsilon = 0  # randomness
         self.gamma = 0.9  # discount rate, play around must be smaller than 1
         self.memory = deque(maxlen=MAX_MEMORY)  # popleft(), when the memory passes 100_000
-        self.model = Linear_QNet(11,  512, 3)
+        self.model = Linear_QNet(11,  512, 3)  # Neural network for estimating Q-values
         self.trainer = QTrainer(self.model, lr=LEARNING_RATE, gamma=self.gamma)
 
         self.model.load()
 
+    # Extracts the current state of the game as input features for the model
     def get_state(self, game):
         head = game.snake[0]
         point_l = Point(head.x - 20, head.y)
@@ -31,6 +32,7 @@ class Agent:
         dir_u = game.direction == Direction.UP
         dir_d = game.direction == Direction.DOWN
 
+        # State representation: Danger, movement direction, and food location
         state = [
             # Danger straight
             (dir_r and game.is_collision(point_r)) or
@@ -65,21 +67,26 @@ class Agent:
 
         return np.array(state, dtype=int)
 
+    # Stores the agent's experience in memory for replay
     def remember(self, state, action, reward, next_state, done):
         self.memory.append((state, action, reward, next_state, done))  # popleft if MAX_MEMORY
 
+    # Trains the model using experiences from the memory (batch sampling)
     def train_long_memory(self):
         if len(self.memory) > BATCH_SIZE:
             mini_sample = random.sample(self.memory, BATCH_SIZE)  # list of tuples
         else:
             mini_sample = self.memory
 
+        # Unpacks the batch into separate components
         states, actions, rewards, next_states, dones = zip(*mini_sample)
         self.trainer.train_step(states, actions, rewards, next_states, dones)
 
+    # Trains the model using the most recent experience (immediate learning)
     def train_short_memory(self, state, action, reward, next_state, done):
         self.trainer.train_step(state, action, reward, next_state, done)
 
+    # Determines the next move based on the current state
     def get_action(self, state):
         # random moves: tradeoff between exploration / exploitation
         self.epsilon = 80 - self.n_games
@@ -128,6 +135,7 @@ def train():
             agent.n_games += 1
             agent.train_long_memory()
 
+            # Save the model if it achieves a new record score
             if score > record:
                 record = score
                 agent.model.save(agent.trainer.optimizer)

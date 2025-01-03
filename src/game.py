@@ -9,6 +9,7 @@ pygame.init()
 font = pygame.font.Font('../assets/arial.ttf', 25)
 
 
+# Enumeration to represent the four possible directions
 class Direction(Enum):
     RIGHT = 1
     LEFT = 2
@@ -31,7 +32,9 @@ class SnakeGameAI:
         self.reset()
 
     def reset(self):
-        # init game state
+        """
+        Resets the game to its initial state.
+        """
         self.direction = Direction.RIGHT
 
         self.head = Point(self.w / 2, self.h / 2)
@@ -46,9 +49,13 @@ class SnakeGameAI:
         self.time_since_last_food = 0
         
     def _place_food(self):
+        """
+        Places a food item at a random location, ensuring it doesn't overlap with the snake.
+        """
         x = random.randint(0, (self.w - BLOCK_SIZE) // BLOCK_SIZE) * BLOCK_SIZE
         y = random.randint(0, (self.h - BLOCK_SIZE) // BLOCK_SIZE) * BLOCK_SIZE
         self.food = Point(x, y)
+        # Ensure food is not placed on the snake
         if self.food in self.snake:
             self._place_food()
         
@@ -91,6 +98,9 @@ class SnakeGameAI:
         return reward, game_over, self.score
     
     def is_collision(self, pt=None):
+        """
+        Checks for collisions with the wall or itself.
+        """
         # hits boundary
         if pt is None:
             pt = self.head
@@ -103,6 +113,9 @@ class SnakeGameAI:
         return False
 
     def _update_ui(self):
+        """
+        Updates the game UI by drawing the snake, food, and score.
+        """
         self.display.fill(BLACK)  # Or your custom background
 
         # Draw the snake
@@ -121,10 +134,14 @@ class SnakeGameAI:
         pygame.display.flip()
 
     def _move(self, action):
+        """
+        Updates the snake's direction and position based on the action taken.
+        """
         # [straight, right, left]
         clock_wise = [Direction.RIGHT, Direction.DOWN, Direction.LEFT, Direction.UP]
         idx = clock_wise.index(self.direction)
 
+        # Determine the new direction
         if np.array_equal(action, [1, 0, 0]):
             new_direction = clock_wise[idx] # no change
         elif np.array_equal(action, [0, 1, 0]):
@@ -136,6 +153,7 @@ class SnakeGameAI:
 
         self.direction = new_direction
 
+        # Update the head position based on the new direction
         x = self.head.x
         y = self.head.y
         if self.direction == Direction.RIGHT:
