@@ -107,6 +107,8 @@ class Agent:
 def train():
     plot_scores = []
     plot_mean_scores = []
+    # scores_and_mean_scores = {'scores': [], 'mean_scores': []}
+    plot_survival_time = []
     total_score = 0
     record = 0
     agent = Agent()
@@ -128,6 +130,7 @@ def train():
 
         # remember
         agent.remember(state_old, final_move, reward, state_new, done)
+        survival_time = game.frame_iteration
 
         if done:
             # train long memory, plot the results
@@ -140,13 +143,17 @@ def train():
                 record = score
                 agent.model.save(agent.trainer.optimizer)
 
-            print('Game', agent.n_games, 'Score', score, 'Record:', record)
+            print('Game', agent.n_games, 'Score', score, 'Record:', record, 'Survival Time', survival_time)
 
-            plot_scores.append(score)
             total_score += score
             mean_score = total_score / agent.n_games
+
+            plot_scores.append(score)
             plot_mean_scores.append(mean_score)
-            plot(plot_scores, plot_mean_scores)
+            plot_survival_time.append(survival_time)
+
+            # Update the plots live
+            plot(plot_scores, plot_mean_scores, plot_survival_time)
 
 
 if __name__ == '__main__':

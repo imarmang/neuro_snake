@@ -68,7 +68,7 @@ class SnakeGameAI:
                 quit()
 
         # 2. move
-        self._move(action) # update the head
+        self._move(action)  # update the head
         self.snake.insert(0, self.head)
         
         # 3. check if game over
@@ -125,7 +125,6 @@ class SnakeGameAI:
             pygame.draw.rect(self.display, BLUE1, pygame.Rect(pt.x, pt.y, BLOCK_SIZE, BLOCK_SIZE))  # Body
 
         pygame.draw.rect(self.display, GREEN, pygame.Rect(self.food.x, self.food.y, BLOCK_SIZE, BLOCK_SIZE))
-
 
         # Display score
         text = font.render(f"Score: {self.score}", True, WHITE)
