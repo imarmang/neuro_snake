@@ -6,7 +6,7 @@ from collections import namedtuple
 from config.constants import WHITE, RED, BLUE1, BLACK, BLOCK_SIZE, SPEED, GREEN
 
 pygame.init()
-font = pygame.font.Font('../assets/arial.ttf', 25)
+font = pygame.font.Font('../neuro_snake/assets/arial.ttf', 25)
 
 
 # Enumeration to represent the four possible directions
