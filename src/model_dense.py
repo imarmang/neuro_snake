@@ -39,7 +39,8 @@ class Linear_QNet(nn.Module):
         file_path = os.path.join(model_folder_path, file_name)
 
         if os.path.exists(file_path):
-            self.load_state_dict(torch.load(file_path))
+            state_dict = torch.load(file_path, map_location="cpu", weights_only=True)
+            self.load_state_dict(state_dict)
             print(f"Model loaded successfully from {file_path}")
 
         else:
@@ -64,8 +65,9 @@ class QTrainer:
         optimizer = optim.Adam(self.model.parameters(), lr=self.lr)
 
         if os.path.exists(file_path):
-            checkpoint = torch.load(file_path)
+            checkpoint = torch.load(file_path, map_location="cpu", weights_only=False)
             optimizer.load_state_dict(checkpoint)
+
             print(f"Optimizer loaded successfully from {file_path}")
         else:
             # Otherwise, create a new optimizer
