@@ -2,4 +2,3 @@ pygame
 numpy
 torch
 matplotlib
-ipython
