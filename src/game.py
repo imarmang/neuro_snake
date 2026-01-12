@@ -1,34 +1,29 @@
 import pygame
 import random
 import numpy as np
-from enum import Enum
 from collections import namedtuple
-from config.constants import WHITE, RED, BLUE1, BLACK, BLOCK_SIZE, SPEED, GREEN
+from config import WHITE, RED, BLUE1, BLACK, BLOCK_SIZE, SPEED, GREEN, Direction
+
 
 pygame.init()
-font = pygame.font.Font('../assets/arial.ttf', 25)
-
-
-# Enumeration to represent the four possible directions
-class Direction(Enum):
-    RIGHT = 1
-    LEFT = 2
-    UP = 3
-    DOWN = 4
-
-
 Point = namedtuple('Point', 'x, y')
 
 
 class SnakeGameAI:
-    def __init__(self, WIDTH, HEIGHT, FOOD_TIME_OUT):
+    def __init__(self, WIDTH, HEIGHT, FOOD_TIME_OUT, algo):
         self.w = WIDTH
         self.h = HEIGHT
         self.food_timeout = FOOD_TIME_OUT
+
         # init display
         self.display = pygame.display.set_mode((self.w, self.h))
-        pygame.display.set_caption('Snake')
+        pygame.display.set_caption(f'Snake Game - {algo.upper()} Method')
         self.clock = pygame.time.Clock()
+        try: 
+            self.font = pygame.font.Font('../assets/arial.ttf', 25)
+        except Exception:
+            self.font = pygame.font.SysFont("arial", 25)
+
         self.reset()
 
     def reset(self):
@@ -62,6 +57,7 @@ class SnakeGameAI:
     def play_step(self, action):
         self.frame_iteration += 1
         # 1. collect user input
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -127,7 +123,7 @@ class SnakeGameAI:
         pygame.draw.rect(self.display, GREEN, pygame.Rect(self.food.x, self.food.y, BLOCK_SIZE, BLOCK_SIZE))
 
         # Display score
-        text = font.render(f"Score: {self.score}", True, WHITE)
+        text = self.font.render(f"Score: {self.score}", True, WHITE)
         self.display.blit(text, [0, 0])
 
         pygame.display.flip()
