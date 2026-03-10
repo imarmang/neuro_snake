@@ -238,4 +238,58 @@ It is intended as:
 * a portfolio-quality project showcasing applied RL
 
 
-# ToDO: add results for the comparison, and polish the readme
+# Results
+
+Both algorithms were trained for **1,000 episodes** using seed `42` and the same neural network architecture (11 inputs → 512 hidden units → 3 outputs). After training, each model was evaluated over **50 greedy episodes** (ε = 0) to measure true learned performance.
+
+---
+
+## Training Performance
+
+### Score per Episode
+![Training Score per Episode](runs/compare_baseline/train_score.png)
+
+Both agents score near 0 for the first ~150 episodes while the exploration rate is high. DQN begins learning around episode 100, while Double DQN catches up rapidly around episode 220. Double DQN reaches a higher peak training score (**71**) compared to DQN (**66**).
+
+### Rolling Mean — Last 100 Episodes
+![Training Mean100](runs/compare_baseline/train_mean100.png)
+
+Double DQN peaks at a higher rolling mean (~32) and stabilizes around ~29. DQN converges slightly earlier but plateaus at a lower average (~27). Both algorithms show clear convergence after ~400 episodes.
+
+---
+
+## Evaluation Results (ε = 0, 50 episodes)
+
+### Score Distribution
+![Eval Score Distribution](runs/compare_baseline/eval_score_hist.png)
+
+### Frames Alive Distribution
+![Eval Frames Alive Distribution](runs/compare_baseline/eval_frames_alive_hist.png)
+
+---
+
+## Summary Table
+
+| Metric | DQN | Double DQN |
+|---|---|---|
+| Training episodes | 1,000 | 1,000 |
+| Peak training score | 66 | 71 |
+| Avg evaluation score | **29.78** | 28.98 |
+| Std deviation | ±9.77 | ±11.76 |
+| Max evaluation score | 59 | **65** |
+| Min evaluation score | 9 | 2 |
+| Median evaluation score | 28.0 | 26.5 |
+| Avg frames alive | 595.8 | **609.6** |
+| Max frames alive | 1,223 | **1,515** |
+| Scored 20+ | **88%** of games | 80% of games |
+| Scored 40+ | 16% of games | **18%** of games |
+
+---
+
+## Key Takeaways
+
+**DQN** achieved a slightly higher average evaluation score (29.78 vs 28.98) and was more consistent, with a lower standard deviation (±9.77 vs ±11.76) and a higher rate of games scoring 20 or above (88% vs 80%).
+
+**Double DQN** showed a higher performance ceiling — reaching a peak score of 65 (vs 59) and surviving up to 1,515 frames (vs 1,223). This aligns with the theoretical benefit of Double DQN: reduced Q-value overestimation leads to better long-run behaviour, even if convergence is noisier.
+
+Both agents far outperform random play, consistently scoring 20–40 points per game across evaluation episodes. The results demonstrate that both DQN and Double DQN successfully learn robust navigation policies within 1,000 training episodes.
