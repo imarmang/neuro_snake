@@ -63,7 +63,10 @@ class Agent:
         self.model.load(model_dir=cfg.run_dir)
 
     def update_target(self):
-        self.target_model.load_state_dict(self.model.state_dict(), map_location=self.device)
+        # self.target_model.load_state_dict(self.model.state_dict(), map_location=self.device)
+        # The new pytorch required no map_location
+        self.target_model.load_state_dict(self.model.state_dict())
+
 
     # Extracts the current state of the game as input features for the model
     def get_state(self, game):
