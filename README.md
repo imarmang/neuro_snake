@@ -247,12 +247,12 @@ Both algorithms were trained for **1,000 episodes** using seed `42` and the same
 ## Training Performance
 
 ### Score per Episode
-![Training Score per Episode](runs/compare_baseline/train_score.png)
+![Training Score per Episode](src/runs/compare_baseline/train_score.png)
 
 Both agents score near 0 for the first ~150 episodes while the exploration rate is high. DQN begins learning around episode 100, while Double DQN catches up rapidly around episode 220. Double DQN reaches a higher peak training score (**71**) compared to DQN (**66**).
 
 ### Rolling Mean — Last 100 Episodes
-![Training Mean100](runs/compare_baseline/train_mean100.png)
+![Training Mean100](src/runs/compare_baseline/train_mean100.png)
 
 Double DQN peaks at a higher rolling mean (~32) and stabilizes around ~29. DQN converges slightly earlier but plateaus at a lower average (~27). Both algorithms show clear convergence after ~400 episodes.
 
@@ -261,10 +261,10 @@ Double DQN peaks at a higher rolling mean (~32) and stabilizes around ~29. DQN c
 ## Evaluation Results (ε = 0, 50 episodes)
 
 ### Score Distribution
-![Eval Score Distribution](runs/compare_baseline/eval_score_hist.png)
+![Eval Score Distribution](src/runs/compare_baseline/eval_score_hist.png)
 
 ### Frames Alive Distribution
-![Eval Frames Alive Distribution](runs/compare_baseline/eval_frames_alive_hist.png)
+![Eval Frames Alive Distribution](src/runs/compare_baseline/eval_frames_alive_hist.png)
 
 ---
 
